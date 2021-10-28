@@ -43,9 +43,9 @@ const createUser = async(req, res)=>{
 }
 const loginUser = async(req, res)=>{
     const { email, password } = req.body
-
     try {
         const findUser = await User.findOne({email})
+        const {name, id:uid} = findUser
         const token = await generateJWT(findUser._id, findUser.name)
 
         if (!findUser) {// find user dont exist
@@ -62,7 +62,7 @@ const loginUser = async(req, res)=>{
                 ok:true,
                 message:'login successful',
                 uid,
-                password,
+                name,
                 token
             })
         }
