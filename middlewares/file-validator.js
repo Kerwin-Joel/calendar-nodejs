@@ -8,7 +8,7 @@ const validateFiles = (req, res, next) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({
             ok:false,
-            errors:errors.mapped()
+            ...errors.mapped()
         })
     }
     next();

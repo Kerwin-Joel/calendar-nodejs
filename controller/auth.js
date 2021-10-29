@@ -19,10 +19,11 @@ const createUser = async(req, res)=>{
             
             //Generate JWT 
             const token = await generateJWT(newUserRequest._id, newUserRequest.name)
+            console.log(newUserResponse.id)
             return res.status(201).json({
                 ok:true,
                 message:'create user',
-                uid:newUserResponse.uid,
+                uid:newUserResponse.id,
                 name:newUserResponse.name,
                 token
             })
@@ -47,7 +48,7 @@ const loginUser = async(req, res)=>{
         const findUser = await User.findOne({email})
         const {name, id:uid} = findUser
         const token = await generateJWT(findUser._id, findUser.name)
-
+        console.log(findUser)
         if (!findUser) {// find user dont exist
             return res.status(400).json({
                 ok:false,
@@ -65,6 +66,11 @@ const loginUser = async(req, res)=>{
                 name,
                 token
             })
+        }else{
+            return res.status(400).json({
+                ok:false,
+                message:'email or password invalid',
+            })
         }
     } catch (error) {
         console.log(error);
@@ -79,7 +85,9 @@ const renewToken = async(req, res)=>{
     const token = await generateJWT(req.uid, req.name)
     res.json({
         ok:true,
-        token
+        token,
+        uid:req.uid,
+        name:req.name
     })
 }
 
